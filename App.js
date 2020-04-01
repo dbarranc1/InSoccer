@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, ImageBackground, Image } from 'react-native';
+import MapView ,{Marker} from 'react-native-maps';
+import { StyleSheet, Text, View, ImageBackground, Image, Dimensions } from 'react-native';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 
@@ -31,23 +32,23 @@ export default function App() {
      let location = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Highest});
      const {latitude, longitude} = location.coords;
      setState({...state, location:{latitude, longitude}});
-     getGeocodeAsync({latitude, longitude});
+   //  getGeocodeAsync({latitude, longitude});
   };
 
 
   return (
-   <ImageBackground source={require('./assets/bg.jpg')} blurRadius={5} style={styles.container}>
-     <View style={styles.overlay}>
-         <Image source={require('./assets/marker.png')} style={{width:100, height:100}}></Image>
-  <Text style={styles.heading1}>{state.geocode ?`${state.geocode[0].city}, ${state.geocode[0].isoCountryCode}`: ""}
-  </Text>
-  <Text style={styles.heading2}>{state.geocode ? state.geocode[0].street : ""}
-  </Text>
-  <Text style={styles.heading3}>{state.location ?`${state.location.latitude}, ${state.location.longitude}`: ""}
-  <Text style={styles.heading2}>{state.errorMessage}</Text>
-  </Text>
-     </View>
-   </ImageBackground>
+    <View style={styles.container}>
+    {state.location && <MapView
+    initialRegion={{
+      latitude: parseFloat(state.location.latitude),
+      longitude: parseFloat(state.location.longitude),
+      latitudeDelta: 0.0122,
+      longitudeDelta: 0.0121}}
+     style={styles.mapStyle}>
+       <Marker
+      coordinate={{latitude: parseFloat(state.location.latitude), longitude: parseFloat(state.location.longitude)}}
+    /></MapView>}
+  </View>
   );
 }
 
@@ -57,29 +58,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    
   },
-  overlay:{
-    backgroundColor:"#00000070",
-    height:"100%",
-    width:"100%",
-    justifyContent:"center",
-    alignItems:"center"
+  mapStyle: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   },
-  heading1:{
-    color:"#fff",
-    fontWeight:"bold",
-    fontSize:30,
-    margin:20
-  },
-  heading2:{
-    color:"#fff",
-    margin:5,
-    fontWeight:"bold",
-    fontSize:15
-  },
-  heading3:{
-    color:"#fff",
-    margin:5
-  }
 });

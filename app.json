@@ -24,7 +24,18 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.lucia.insoccer",
+      "buildNumber": "1.0.0",
       "supportsTablet": true
-    }
+    },
+    "android": {
+      "package": "com.lucia.insoccer",
+      "versionCode": 1,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCp-BUoX8B8699rkbnb2P2CK4gXSeesVcc"
+        }
+      }
+    }	  
   }
 }
